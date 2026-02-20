@@ -1,0 +1,30 @@
+# ConfigMap per configurazioni custom
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: quarkus-k3s-poc-config
+  namespace: default
+  labels:
+    app: quarkus-k3s-poc
+data:
+  # Application configuration
+  APPLICATION_ENV: "production"
+  LOG_LEVEL: "INFO"
+  
+  # Example: Database connection (if needed later)
+  # DB_HOST: "postgres-service"
+  # DB_PORT: "5432"
+---
+# Secret per dati sensibili (esempio)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: quarkus-k3s-poc-secret
+  namespace: default
+  labels:
+    app: quarkus-k3s-poc
+type: Opaque
+stringData:
+  # Placeholder per secrets
+  # DB_PASSWORD: "changeme"
+  API_KEY: "your-api-key-here"

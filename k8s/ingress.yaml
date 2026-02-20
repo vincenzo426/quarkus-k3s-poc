@@ -1,0 +1,35 @@
+# Ingress per K3s con Traefik
+# Applicare dopo il deployment del servizio
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: quarkus-k3s-poc-ingress
+  namespace: default
+  annotations:
+    # Traefik annotations (default ingress controller in k3s)
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.middlewares: default-strip-prefix@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: api.k3s.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: quarkus-k3s-poc
+                port:
+                  number: 8080
+---
+# Middleware per strip prefix (opzionale)
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-prefix
+  namespace: default
+spec:
+  stripPrefix:
+    prefixes:
+      - /api
